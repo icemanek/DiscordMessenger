@@ -1,6 +1,12 @@
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
+
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
@@ -12,14 +18,28 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+@Component
+@PropertySource("classpath:application.properties")
+@ConfigurationProperties("spring.discord")
 public class DiscordApi {
 
-    public static void main(String[] args) throws IOException, InterruptedException, JSONException {
+    @Value("${spring.discord.uri}")
+    String uriToManager;
+
+    @Value("${spring.discord.url}")
+    String urlDiscord;
+
+    @Value("${spring.discord.url.to.test}")
+    String urlDiscordTest;
+
+    public void main(String[] args) throws IOException, InterruptedException, JSONException {
+
+
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
-                .uri(URI.create("http://develop.ms.codingtree.pl/api/meetings/sorted"))
+                .uri(URI.create(uriToManager))
                 .build();
 
         HttpResponse<String> response = client.send(request,
@@ -51,9 +71,9 @@ public class DiscordApi {
         String nearestDate = sdfDate.format(firstDateToDateTime);
         String nextDate = sdfDate.format(secondDateToDateTime);
 
-// kanałCT     DiscordWebhook webhook = new DiscordWebhook("https://discordapp.com/api/webhooks/665191792676831234/n1yHAY0oCU1C7vjtkQDDzugcQvW7DdkmnKca8_kdz3L0xo-c8OID75mfiROhj5dRv0wp");
+// kanałCT     DiscordWebhook webhook = new DiscordWebhook(urlDiscord);
 
-        DiscordWebhook webhook = new DiscordWebhook("https://discordapp.com/api/webhooks/681766338250801163/4ayouBjghURBqi4d0dIgMdaJIo3EpPxuXliyZ779zN_2gupzLWOwoJXM--a4i-nB--ke");
+        DiscordWebhook webhook = new DiscordWebhook(urlDiscordTest);
         webhook.setContent("@everyone");
         webhook.setAvatarUrl("https://cdn3.vectorstock.com/i/1000x1000/99/37/white-tree-icon-in-green-round-vector-1869937.jpg");
         webhook.setUsername("Przypominajka");
