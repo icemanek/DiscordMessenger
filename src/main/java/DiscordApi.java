@@ -1,11 +1,5 @@
-
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
-import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 
 import java.awt.*;
 import java.io.IOException;
@@ -18,23 +12,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-@Component
-@PropertySource("classpath:application.properties")
-@ConfigurationProperties("spring.discord")
 public class DiscordApi {
 
-    @Value("${spring.discord.uri}")
-    String uriToManager;
+    public static void main(String[] args) throws IOException, InterruptedException, JSONException {
 
-    @Value("${spring.discord.url}")
-    String urlDiscord;
+        String uriToManager = args[0];
 
-    @Value("${spring.discord.url.to.test}")
-    String urlDiscordTest;
-
-    public void main(String[] args) throws IOException, InterruptedException, JSONException {
-
-
+        String urlDiscord = args[1];
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -71,9 +55,7 @@ public class DiscordApi {
         String nearestDate = sdfDate.format(firstDateToDateTime);
         String nextDate = sdfDate.format(secondDateToDateTime);
 
-// kanałCT     DiscordWebhook webhook = new DiscordWebhook(urlDiscord);
-
-        DiscordWebhook webhook = new DiscordWebhook(urlDiscordTest);
+        DiscordWebhook webhook = new DiscordWebhook(urlDiscord);
         webhook.setContent("@everyone");
         webhook.setAvatarUrl("https://cdn3.vectorstock.com/i/1000x1000/99/37/white-tree-icon-in-green-round-vector-1869937.jpg");
         webhook.setUsername("Przypominajka");
